@@ -123,7 +123,23 @@ class KNearestNeighbor(object):
     # HINT: Try to formulate the l2 distance using matrix multiplication    #
     #       and two broadcast sums.                                         #
     #########################################################################
-    pass
+    # answer:
+    # M=np.dot(X,self.X_train.T)
+    # nrow=M.shape[0]
+    # ncol=M.shape[1]
+    # te = np.diag(np.dot(X,X.T))    #diag() 提取对角元素构成一维数组
+    # tr = np.diag(np.dot(self.X_train,self.X_train.T))
+    # te = np.reshape(np.repeat(te,ncol),M.shape)   #repeat 把te复制了ncol次
+    # tr = np.reshape(np.repeat(tr,nrow), M.T.shape)
+    # sq=-2 * M +te+tr.T
+    # dists = np.sqrt(sq)
+    # 上述方法对我而言有点过于trick...
+    dists = np.multiply(np.dot(X,self.X_train.T),-2)
+    sq1 = np.sum(np.power(X,2),axis=1,keepdims = True)   #(500,1)
+    sq2 = np.sum(np.power(self.X_train,2),axis=1)        #(5000,)
+    dists = dists+sq1                  
+    dists = dists+sq2 
+    dists = np.sqrt(dists)    
     #########################################################################
     #                         END OF YOUR CODE                              #
     #########################################################################
